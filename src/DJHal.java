@@ -8,69 +8,116 @@ public class DJHal extends PApplet {
 	 * Main class for DJHal
 	 */
 	
-	// INTERFACE
+	// GUI
 	public PFont fontA;
-	final public int ORANGE = color(255,85,0,180);
-	final public int  GREY = color(200);
+	final public int COLOUR2 = color(255,85,0,180);
+	final public int COLOUR1 = color(200);
 	final public int BLACK = color(0);
 	final public int WHITE = color(255);
 	String typing;
 	ArrayList<GUIElement> guiElements = new ArrayList<GUIElement>();
 	
+	// SESSION
+	ArrayList<Song> songs = new ArrayList<Song>();
+	String[] descriptors;
+	String description;
+	
 	// ECHONEST
 	private String enKey;
 	EchoNest echoNest;
 	
-	// SESSION INFO
-	ArrayList<Song> songs = new ArrayList<Song>();
-	String description;
+	// SERVER
+	ServerHandler serverHandler;
 	
 	// OTHER
 	Random rand = new Random();
 	
 	
 	// =====================================
-	public void setup() {
-		fontA = loadFont("Georgia-36.vlw");
-		size(screenWidth,screenHeight);
-		smooth();
-		
-		// APIs
-		String[] temp = loadStrings("enKey.txt");
-		enKey = temp[0];
-		echoNest = new EchoNest(this, enKey);
-		songs.add(echoNest.newSession(getRandomDescription()));
-		
-		// GUI ELEMENTS
-		// guiElements.add(new TextBox(this,500,200,400,75,"Type a description"));
-		
-	}
-	
-	// =====================================
-	public void draw() {
-		background(255);
-		showTitle();
-		displaySongHistory();
-		displayGuiElements();
-		
-	}
-	
-	public void mousePressed(){
-		songs.add(echoNest.nextSong());
-	}
-	
+	//           METHODS
 	// =====================================
 	public static void main(String[] args) {
 		PApplet.main(new String[] {"--present", "DJHal"});
 	}
 	
-	private String getRandomDescription() { // returns a random descriptor from the database to start a new playlist
-		String[] descriptors = loadStrings("descriptors.txt");
-		int i = rand.nextInt(descriptors.length);
-		description = descriptors[i];
-		return description;
+	public void setup() {
+		fontA = loadFont("Georgia-36.vlw");
+		size(1000,800);
+		smooth();
+		
+		// SESSION
+		descriptors = loadStrings("descriptors.txt");
+		
+		// SERVER
+		serverHandler = new ServerHandler(this, 8081);
+		
+		// ECHONEST
+		echoNest = new EchoNest(this);
+		newENSession(getRandomDescription());
+		
+		// GUI 
+		guiElements.add(new TextBox(this,500,200,400,75,"Type a description"));
+		
 	}
 	
+	public void draw() {
+		background(255);
+		showTitle();
+		displaySongHistory();
+		displayGuiElements();
+		serverHandler.emptyQueue();
+	}
+	
+
+	// KEYBOARD AND MOUSE EVENTS
+	// =====================================
+	public void mousePressed(){
+		for (GUIElement g : guiElements) {
+			if (g.contains(mouseX, mouseY)) {
+				g.clicked();
+			}
+		}
+	}
+	
+	public void keyTyped() {
+		  if (key == BACKSPACE) {
+		    typing = typing.substring(0, constrain(typing.length()-1,0,200));
+		  } else if (keyCode == TAB || key == ENTER || key == RETURN) {
+		    newENSession(typing);
+		    typing = "";
+		  } else {
+		    typing += key;
+		  }
+		  if (key == '0') {
+			  playSong(echoNest.nextSong());
+			  
+		  }
+		}
+	
+	// SONGS AND DESCRIPTION
+	// =====================================
+	private void newENSession(String descrip) {
+		description = descrip;
+		descriptors = append(descriptors, descrip);
+		saveStrings("descriptors.txt", descriptors);
+		descrip = descrip.replace(" ", "%20");
+		playSong(echoNest.newSession(descrip));	
+	}
+	
+	// returns a random descriptor to be used to start a playlist
+	private String getRandomDescription() { 
+		int i = rand.nextInt(descriptors.length);
+		return descriptors[i];
+	}
+	
+	private void playSong(Song song) {
+		songs.add(song);
+		serverHandler.sendText(Integer.toString(song.id));
+	}
+	
+	
+	// GUI ELEMENT METHODS
+	// =====================================
 	private void displayGuiElements() {
 		for (GUIElement g : guiElements) {
 			g.display();

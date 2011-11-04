@@ -1,4 +1,3 @@
-import processing.core.PApplet;
 
 public class GUIElement {
 
@@ -6,22 +5,22 @@ public class GUIElement {
 	float y;
 	float w;
 	float h;
-	PApplet parent;
+	DJHal p; //Parent PApplet
 
-	GUIElement(PApplet _parent, float _x, float _y, float _w, float _h) {
+	GUIElement(DJHal _p, float _x, float _y, float _w, float _h) {
 		x = _x;
 		y = _y;
 		w = _w;
 		h = _h;
-		parent = _parent;
+		p = _p;
 	}
 
 	void display() {
 
 	}
 
-	boolean contains() {
-		if (parent.mouseX > x && parent.mouseX < x + w && parent.mouseY > y && parent.mouseY < y + h) {
+	boolean contains(float mouseX, float mouseY) {
+		if (mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h) {
 			return true;
 		} else {
 			return false;

@@ -25,9 +25,11 @@ public class EchoNest {
 	private String tsKey;
 	private TinySong tinySong;
 
-	EchoNest(PApplet _parent, String _enKey) {
-
-		enKey = _enKey;
+	EchoNest(PApplet _parent) {
+		parent = _parent;
+		
+		String[] temp = parent.loadStrings("enKey.txt");
+		enKey = temp[0];
 
 		format = "&format=json";
 		playlistUrl = "http://developer.echonest.com/api/v4/playlist/dynamic?api_key="
@@ -35,9 +37,7 @@ public class EchoNest {
 		infoUrl = "http://developer.echonest.com/api/v4/playlist/session_info?api_key="
 				+ enKey + format + "&session_id=";
 
-		parent = _parent;
-
-		String[] temp = parent.loadStrings("tsKey.txt");
+		temp = parent.loadStrings("tsKey.txt");
 		tsKey = temp[0];
 		tinySong = new TinySong(parent, tsKey);
 

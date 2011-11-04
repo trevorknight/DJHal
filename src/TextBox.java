@@ -9,29 +9,29 @@ public class TextBox extends GUIElement {
 	// SubmitButton startNewSongSession;
 	// SubmitButton startNewDecriptionSession;
 
-	TextBox(PApplet _parent, float _x, float _y, float _w, float _h, String _defaultText) {
-		super(_parent, _x, _y, _w, _h);
+	TextBox(DJHal _p, float _x, float _y, float _w, float _h, String _defaultText) {
+		super(_p, _x, _y, _w, _h);
 		defaultText = _defaultText;
 		active = false;
 	}
 
 	void display() {
-		parent.rectMode(parent.CENTER);
-		parent.stroke(parent.GREY);
-		parent.strokeWeight(1);
-		parent.noFill();
-		parent.rectMode(parent.CORNER);
-		parent.rect(x, y, w, h);
-		parent.fill(parent.GRAY);
-		parent.textAlign(parent.LEFT);
+		p.rectMode(PApplet.CENTER);
+		p.stroke(p.COLOUR1);
+		p.strokeWeight(1);
+		p.noFill();
+		p.rectMode(PApplet.CORNER);
+		p.rect(x, y, w, h);
+		p.fill(p.COLOUR1);
+		p.textAlign(PApplet.LEFT);
 		if (!active) {
-			parent.text(defaultText, x + 3, y + h / 2 + 5);
+			p.text(defaultText, x + 3, y + h / 2 + 5);
 		} else {
-			text(parent.typing, x + 3, y + h / 2 + 5);
-			parent.strokeWeight(3);
-			stroke(parent.ORANGE);
-			if (parent.millis() % 1000 > 500) {
-				line(x + textWidth(parent.typing) + 3, y + 4, x + textWidth(parent.typing)+ 3, y + h - 4);
+			p.text(p.typing, x + 3, y + h / 2 + 5);
+			p.strokeWeight(3);
+			p.stroke(p.COLOUR2);
+			if (p.millis() % 1000 > 500) {
+				p.line(x + p.textWidth(p.typing) + 3, y + 4, x + p.textWidth(p.typing)+ 3, y + h - 4);
 			}
 		}
 	}
@@ -39,7 +39,7 @@ public class TextBox extends GUIElement {
 	void clicked() {
 		if (!active) {
 			active = true;
-			parent.typing = "";
+			p.typing = "";
 		}
 
 	}
