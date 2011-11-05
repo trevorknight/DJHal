@@ -13,17 +13,14 @@ public class EchoNest {
 	// TODO getInfo();
 
 	private String sessionId; // Unique string provided back by EN
-	private String type = "&type=artist-description"; // types can be artist,
-														// song,
+	private String type = "&type=artist-description"; // types can be artist-description, song
+	private String fmaArgs = "&bucket=id:fma&bucket=tracks&limit=true";
 	private String[] keywords; // keywords from the session_info command
 	private String playlistUrl;
 	private String infoUrl;
 	private String format;
 	private PApplet parent;
 	private String enKey;
-
-	private String tsKey;
-	private TinySong tinySong;
 
 	EchoNest(PApplet _parent) {
 		parent = _parent;
@@ -33,13 +30,10 @@ public class EchoNest {
 
 		format = "&format=json";
 		playlistUrl = "http://developer.echonest.com/api/v4/playlist/dynamic?api_key="
-				+ enKey + format;
+				+ enKey + format + fmaArgs;
 		infoUrl = "http://developer.echonest.com/api/v4/playlist/session_info?api_key="
 				+ enKey + format + "&session_id=";
 
-		temp = parent.loadStrings("tsKey.txt");
-		tsKey = temp[0];
-		tinySong = new TinySong(parent, tsKey);
 
 	}
 
@@ -56,6 +50,7 @@ public class EchoNest {
 	}
 
 	private JSONObject getResponse(String url) {
+		System.out.println(url);
 		String[] returnedStrings = parent.loadStrings(url);
 		String returnedString = "";
 		for (String s : returnedStrings) {
@@ -69,7 +64,6 @@ public class EchoNest {
 			if (status.getString("message").equals("Success")) {
 				if (sessionId == null) {
 					sessionId = response.getString("session_id");
-					// System.out.println(sessionId);
 				}
 			} else {
 				System.out.println("Error with Echonest response!");
@@ -85,20 +79,26 @@ public class EchoNest {
 	private Song getSong(JSONObject response) {
 		String title = "";
 		String artist = "";
+		String trackID = "";
+		Song returningSong = new Song();
 		try {
 			JSONArray songs = response.getJSONArray("songs");
 			JSONObject song = songs.getJSONObject(0);
 			title = song.getString("title");
 			artist = song.getString("artist_name");
-		} catch (JSONException e) {
+			JSONArray trackInfo = song.getJSONArray("tracks");
+			trackID = trackInfo.getJSONObject(0).getString("foreign_id");
+			trackID = trackID.substring(trackID.lastIndexOf(':')+1);
+			
+		} catch (Exception e) {
 			System.out.println("Error parsing JSON");
 			System.out.println(e.toString());
+			return returningSong;
 		}
-		Song returningSong = tinySong.findSong(artist + " " + title);
-		if (returningSong.id < 0) { // Check if TinySong couldn't find it
-			returningSong = nextSong(); // and get the next song instead
-		}
-		// System.out.println(returningSong.artist + " " + returningSong.title + " " + returningSong.id);
+		returningSong.setTitle(title);
+		returningSong.setArtist(artist);
+		returningSong.setId(Integer.parseInt(trackID));
+		System.out.println(returningSong.getArtist() + " " + returningSong.getTitle() + " " + returningSong.getId());
 		return returningSong;
 	}
 }

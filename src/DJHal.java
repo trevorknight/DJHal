@@ -14,20 +14,22 @@ public class DJHal extends PApplet {
 	final public int COLOUR1 = color(200);
 	final public int BLACK = color(0);
 	final public int WHITE = color(255);
+	String message;
+	boolean showMessage;
+	int messageColour;
+	int messageAlpha;
+	int messageStart;
 	String typing;
 	ArrayList<GUIElement> guiElements = new ArrayList<GUIElement>();
 	
 	// SESSION
 	ArrayList<Song> songs = new ArrayList<Song>();
-	String[] descriptors;
-	String description;
+	ArrayList<String> descriptors = new ArrayList<String>();
+	private String description;
 	
 	// ECHONEST
 	EchoNest echoNest;
-	
-	// SERVER
-	ServerHandler serverHandler;
-	
+		
 	// OTHER
 	Random rand = new Random();
 	
@@ -41,21 +43,22 @@ public class DJHal extends PApplet {
 	
 	public void setup() {
 		fontA = loadFont("Georgia-36.vlw");
-		size(1000,800);
+		size(screenWidth-100,screenHeight-150);
 		smooth();
 		
 		// SESSION
-		descriptors = loadStrings("descriptors.txt");
-		
-		// SERVER
-		serverHandler = new ServerHandler(this, 8081);
+		loadDescriptors();
 		
 		// ECHONEST
 		echoNest = new EchoNest(this);
 		newENSession(getRandomDescription());
 		
 		// GUI 
-		guiElements.add(new TextBox(this,500,200,400,75,"Type a description"));
+		guiElements.add(new TextBox(this,width-500,50,width,50,450,50,"Type a description"));
+		message = "";
+		messageColour = color(220,10,10);
+		messageAlpha = 0;
+		showMessage = false;
 		
 	}
 	
@@ -63,8 +66,8 @@ public class DJHal extends PApplet {
 		background(255);
 		showTitle();
 		displaySongHistory();
-		displayGuiElements();
-		serverHandler.emptyQueue();
+		drawGuiElements();
+		displayMessage();
 	}
 	
 
@@ -89,37 +92,88 @@ public class DJHal extends PApplet {
 		  }
 		  if (key == '0') {
 			  playSong(echoNest.nextSong());
-			  
+		  }
+		  if (key == '9') {
+			  showControls();
+		  }
+		  if (key == '8') {
+			  showMessage = !showMessage;
 		  }
 		}
 	
 	// SONGS AND DESCRIPTION
 	// =====================================
 	private void newENSession(String descrip) {
-		description = descrip;
-		descriptors = append(descriptors, descrip);
-		saveStrings("descriptors.txt", descriptors);
-		descrip = descrip.replace(" ", "%20");
-		playSong(echoNest.newSession(descrip));	
+		String subsDescrip = descrip.replace(" ", "%20");
+		Song tempSong = echoNest.newSession(subsDescrip);
+		if (tempSong.getArtist() != null) {
+			StringFunctions.addIfNew(descriptors, descrip);
+			setDescription(descrip);
+			saveDescriptors();
+			playSong(tempSong);
+		} else {
+			setMessage("Sorry, no " + descrip + " songs found.");
+		}
 	}
 	
 	// returns a random descriptor to be used to start a playlist
 	private String getRandomDescription() { 
-		int i = rand.nextInt(descriptors.length);
-		return descriptors[i];
+		int i = rand.nextInt(descriptors.size());
+		return descriptors.get(i);
 	}
 	
 	private void playSong(Song song) {
 		songs.add(song);
-		serverHandler.sendText(Integer.toString(song.id));
+	}
+	
+	private void loadDescriptors() {
+		String[] tempDescriptors = loadStrings("descriptors.txt");
+		for (String s : tempDescriptors) {
+			descriptors.add(s);
+		}
+	}
+	
+	private void saveDescriptors() {
+		String[] tempDescriptors = new String[descriptors.size()];
+		descriptors.toArray(tempDescriptors);
+		saveStrings("data/descriptors.txt", tempDescriptors);
+	}
+	
+	private void setDescription(String d) {
+		description = d;
 	}
 	
 	
 	// GUI ELEMENT METHODS
 	// =====================================
-	private void displayGuiElements() {
+	private void displayMessage() {
+		if ((millis()/1000) - messageStart > 10 ) {
+			showMessage = false;
+		}
+		if (showMessage) {
+			messageAlpha = constrain(messageAlpha+15,0,255);
+		} else {
+			messageAlpha = constrain(messageAlpha-15,0,255);
+		}
+		fill(color(red(messageColour), green(messageColour), blue(messageColour), messageAlpha));
+		text(message,width-500,25);
+	}
+	
+	private void setMessage(String text) {
+		message = text;
+		showMessage = true;
+		messageStart = millis()/1000;
+	}
+	
+	private void drawGuiElements() {
 		for (GUIElement g : guiElements) {
 			g.display();
+		}
+	}
+	
+	private void showControls() {
+		for (GUIElement g : guiElements) {
+			g.show();
 		}
 	}
 	
@@ -133,7 +187,7 @@ public class DJHal extends PApplet {
 		int newestSong = songs.size()-1;
 		for (int i = newestSong; i >= 0; i--) {
 			fill(fillColor);
-			text(songs.get(i).artist + " - " + songs.get(i).title, 50, 150+((newestSong - i)*50));
+			text(songs.get(i).getArtist() + " - " + songs.get(i).getTitle(), 50, 150+((newestSong - i)*50));
 			fillColor += 20;
 		}
 	}

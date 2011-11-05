@@ -9,16 +9,17 @@ public class TextBox extends GUIElement {
 	// SubmitButton startNewSongSession;
 	// SubmitButton startNewDecriptionSession;
 
-	TextBox(DJHal _p, float _x, float _y, float _w, float _h, String _defaultText) {
-		super(_p, _x, _y, _w, _h);
+	TextBox(DJHal _p, float _shownX, float _shownY, float _hiddenX, float _hiddenY, float _w, float _h, String _defaultText) {
+		super(_p, _shownX, _shownY, _hiddenX, _hiddenY, _w, _h);
 		defaultText = _defaultText;
 		active = false;
 	}
 
 	void display() {
+		super.display();
 		p.rectMode(PApplet.CENTER);
 		p.stroke(p.COLOUR1);
-		p.strokeWeight(1);
+		p.strokeWeight(2);
 		p.noFill();
 		p.rectMode(PApplet.CORNER);
 		p.rect(x, y, w, h);
