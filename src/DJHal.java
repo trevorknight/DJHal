@@ -23,7 +23,6 @@ public class DJHal extends PApplet {
 	String description;
 	
 	// ECHONEST
-	private String enKey;
 	EchoNest echoNest;
 	
 	// SERVER
