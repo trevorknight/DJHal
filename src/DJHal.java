@@ -30,6 +30,8 @@ public class DJHal extends PApplet {
 	// ECHONEST
 	EchoNest echoNest;
 	String[] steers = {"energy", "tempo", "song_hotttnesss", "danceability", "loudness"};
+    float[] steerValues = {0, 0, 0, 0, 0};
+    float[] steerMaxs = {1, 250, 1, 1, -50};
 	
 	
 	// OTHER
@@ -45,7 +47,7 @@ public class DJHal extends PApplet {
 	
 	public void setup() {
 		fontA = loadFont("Georgia-36.vlw");
-		size(screenWidth-100,screenHeight-150);
+		size(screenWidth,screenHeight-50);
 		smooth();
 		
 		// SESSION
@@ -58,7 +60,7 @@ public class DJHal extends PApplet {
 		// GUI 
 		guiElements.add(new TextBox(this,width-500,50,width,50,450,50,"Type a description"));
 		for (int i = 0; i < steers.length; i++) {
-			guiElements.add(new SteerBar(this, steers[i], width/2, 300+75*i, width, 300+75*i, width/2, 50));
+			guiElements.add(new SteerBar(this, i, steers[i], width/2+50, 110+(height/14+5)*i, width, 100+(height/12+25)*i, width/2-75, height/14));
 		}
 		
 		message = "";
@@ -98,12 +100,13 @@ public class DJHal extends PApplet {
 		  }
 		  if (key == '0') {
 			  playSong(echoNest.nextSong());
+              echoNest.getInfo(steers, steerValues);
+              for (float f : steerValues) {
+                  System.out.println(f);
+              }
 		  }
 		  if (key == '9') {
 			  showHideControls();
-		  }
-		  if (key == '8') {
-			  showMessage = !showMessage;
 		  }
 		}
 	
@@ -167,7 +170,7 @@ public class DJHal extends PApplet {
 		text(message,width-400,25);
 	}
 	
-	private void setMessage(String text) {
+	public void setMessage(String text) {
 		message = text;
 		showMessage = true;
 		messageStart = millis()/1000;

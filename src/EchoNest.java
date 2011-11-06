@@ -32,7 +32,7 @@ public class EchoNest {
 
 		format = "&format=json";
 		playlistUrl = "http://developer.echonest.com/api/v4/playlist/dynamic?api_key="
-				+ enKey + format + fmaArgs;
+				+ enKey;
 		infoUrl = "http://developer.echonest.com/api/v4/playlist/session_info?api_key="
 				+ enKey + format + "&session_id=";
 		
@@ -43,7 +43,7 @@ public class EchoNest {
 
 	public Song newSession(String _description) {
 		String description = "&description=" + _description;
-		String url = playlistUrl + type + description;
+		String url = playlistUrl + type + format + fmaArgs + description;
 		steerCommands = "";
 		JSONObject response = getResponse(url);
 		return getSong(response);
@@ -56,8 +56,27 @@ public class EchoNest {
 	}
 	
 	public void steer(String steer) {
-		steerCommands += steer;
+		steerCommands += "&steer="+ steer;
 	}
+
+    public void getInfo(String[] steers, float[] steerValues) {
+        JSONObject sessionInfo = getResponse(infoUrl + "&session_id=" + sessionId);
+        try {
+            JSONArray rules = sessionInfo.getJSONArray("rules");
+            for (int i = 0; i < rules.length(); i++) {
+                String rule = rules.getJSONObject(i).getString("rule");
+                for (int j = 0; j < steers.length; j++) {
+                    if (rule.contains(steers[j])) {
+                        steerValues[j] = Float.parseFloat(rule.substring(rule.lastIndexOf(' ')+1));
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+
+        }
+        
+    }
 
 	private JSONObject getResponse(String url) {
 		System.out.println(url);
@@ -74,6 +93,7 @@ public class EchoNest {
 			if (status.getString("message").equals("Success")) {
 				if (sessionId == null) {
 					sessionId = response.getString("session_id");
+                    System.out.println(sessionId);
 				}
 			} else {
 				System.out.println("Error with Echonest response!");
@@ -99,7 +119,6 @@ public class EchoNest {
 			JSONArray trackInfo = song.getJSONArray("tracks");
 			trackID = trackInfo.getJSONObject(0).getString("foreign_id");
 			trackID = trackID.substring(trackID.lastIndexOf(':')+1);
-			
 		} catch (Exception e) {
 			System.out.println("Error parsing JSON");
 			System.out.println(e.toString());
@@ -111,5 +130,6 @@ public class EchoNest {
 		System.out.println(returningSong.getArtist() + " " + returningSong.getTitle() + " " + returningSong.getId());
 		return returningSong;
 	}
+
 
 }

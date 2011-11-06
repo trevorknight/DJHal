@@ -65,8 +65,8 @@ public class GUIElement {
 		hidden = b;
 	}
 
-	void clicked() {
+    void clicked() {
 
-	}
+    }
 
 }
