@@ -22,7 +22,8 @@ extends mckay.utilities.xml.ParseFileHandler
      /**
       * The url of the mp3 stream
       */
-     private	String[]		streamurl;
+     private	String		streamurl;
+     private   String         length;
 
 
 
@@ -33,7 +34,7 @@ extends mckay.utilities.xml.ParseFileHandler
 
 
      /* PUBLIC METHODS ********************************************************/
-     public String[] getStream(){
+     public String getStream(){
          return streamurl;
      }
 
@@ -66,6 +67,11 @@ extends mckay.utilities.xml.ParseFileHandler
           if (name.equals("stream"))
           {
                isStream = true;
+               length = atts.getValue("length");
+          }
+          else
+          {
+              isStream = false;
           }
 
      }
@@ -80,7 +86,7 @@ extends mckay.utilities.xml.ParseFileHandler
           String contents = new String(ch, start, length);
            if (isStream)
            {
-               streamurl[0] = contents;
+               streamurl = contents;
            }
 
      }
@@ -104,6 +110,7 @@ extends mckay.utilities.xml.ParseFileHandler
       */
      public void endDocument()
      {
-          parsed_file_contents = streamurl;
+          parsed_file_contents[0] = streamurl;
+          parsed_file_contents[1] = length;
      }
 }
