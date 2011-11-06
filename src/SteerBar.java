@@ -25,7 +25,8 @@ public class SteerBar extends GUIElement {
 		p.fill(200);
 		p.rect(x + h + 10, y, w - 2 * h - 20, h);
         p.fill(p.COLOUR2);
-        p.rect(x+h+10, y, p.lerp(x+h+10,w-2*h,p.steerValues[steerBarNumber]/p.steerMaxs[steerBarNumber]),h);
+        System.out.println(p.steerValues[steerBarNumber]/ p.steerMaxs[steerBarNumber]);
+        p.rect(x+h+10, y, p.lerp(x+h+10,w-2*h-20,p.steerValues[steerBarNumber]/p.steerMaxs[steerBarNumber]),h);
 		p.fill(0);
 		p.textAlign(PApplet.CENTER);
 		p.text(name, x + (w) / 2, y + h / 2 + 5);

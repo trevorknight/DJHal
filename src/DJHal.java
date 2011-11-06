@@ -24,6 +24,7 @@ public class DJHal extends PApplet {
 	
 	// SESSION
 	ArrayList<Song> songs = new ArrayList<Song>();
+    Song nextSong;
 	ArrayList<String> descriptors = new ArrayList<String>();
 	private String description;
 	
@@ -31,7 +32,7 @@ public class DJHal extends PApplet {
 	EchoNest echoNest;
 	String[] steers = {"energy", "tempo", "song_hotttnesss", "danceability", "loudness"};
     float[] steerValues = {0, 0, 0, 0, 0};
-    float[] steerMaxs = {1, 250, 1, 1, -50};
+    float[] steerMaxs = {1.0f, 250.0f, 1.0f, 1.0f, -50.0f};
 	
 	
 	// OTHER
