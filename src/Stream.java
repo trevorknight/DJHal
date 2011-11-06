@@ -3,7 +3,6 @@
  * and open the template in the editor.
  */
 import java.io.*;
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.*;
 import javax.sound.sampled.AudioSystem.*;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -12,16 +11,11 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.Clip;
 import java.net.*;
-import org.tritonus.share.sampled.TAudioFormat;
-import org.tritonus.share.sampled.file.TAudioFileFormat;
 import java.net.URL;
-import processing.core.*;
-import processing.xml.*;
 import org.apache.xerces.parsers.SAXParser;
 import org.xml.sax.*;
 import org.xml.sax.XMLReader;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 /**
  *
  * @author jessicathompson
