@@ -203,6 +203,7 @@ public class DJHal extends PApplet {
 		text("Now: ", 10, 150);
 		text("Next: ", 10, 100);
 		textFont(fontA,24);
+		text(nextSong.getArtist() + " - " + nextSong.getTitle(), 50, 100);
 		int newestSong = songs.size()-1;
 		for (int i = newestSong; i >= 0; i--) {
 			fill(fillColor);
