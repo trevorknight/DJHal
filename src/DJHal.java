@@ -16,6 +16,7 @@ public class DJHal extends PApplet {
 	final public int WHITE = color(255);
 	String message;
 	boolean showMessage;
+	boolean isPlaying = true;
 	int messageColour;
 	int messageAlpha;
 	int messageStart;
@@ -134,8 +135,13 @@ public class DJHal extends PApplet {
 	
 	private void playSong(Song song) {
 		songs.add(song);
-		//String streamurl = Stream.getStreamURL(song.id);
-		//Stream.Play(streamurl);		
+		
+		Object[] parsed_file_contents = Stream.getStreamURL(song.id)
+		streamurl = parsed_file_contents[0].toString();
+		Stream.Play(streamurl);
+		isPlaying = true;
+		length = parsed_file_contents[1].toString();
+				
 	}
 	
 	private void loadDescriptors() {
