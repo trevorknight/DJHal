@@ -86,7 +86,7 @@ public class DJHal extends PApplet {
 			}
 		}
 	}
-	
+	//bloop
 	public void keyTyped() {
 		  if (key == BACKSPACE) {
 		    typing = typing.substring(0, constrain(typing.length()-1,0,200));
