@@ -57,5 +57,11 @@ public class SteerButton extends Button {
 	}
 
 	void clicked() {
+		if (direction.equals("left")) {
+			p.echoNest.steer(steerBar.name + "^0.9");
+		}
+		if (direction.equals("right")) {
+			p.echoNest.steer(steerBar.name + "^1.1");
+		}
 	}
 }

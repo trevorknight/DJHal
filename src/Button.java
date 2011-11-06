@@ -4,7 +4,6 @@ public class Button extends GUIElement {
 
 	Button(DJHal _p, float _shownX, float _shownY, float _hiddenX, float _hiddenY, float _w, float _h) {
 		super(_p, _shownX, _shownY, _hiddenX, _hiddenY, _w, _h);
-		System.out.println(shownX + " " + shownY  + " " + hiddenX  + " " + hiddenY);
 	}
 
 	void display() {

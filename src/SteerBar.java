@@ -19,6 +19,7 @@ public class SteerBar extends GUIElement {
 
 	void display() {
 		super.display();
+		p.noStroke();
 		p.fill(200);
 		p.rect(x + h + 10, y, w - 2 * h - 20, h);
 		p.fill(0);

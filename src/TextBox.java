@@ -26,8 +26,14 @@ public class TextBox extends GUIElement {
 		p.fill(p.COLOUR1);
 		p.textAlign(PApplet.LEFT);
 		if (!active) {
+			if (contains(p.mouseX,p.mouseY)) {
+				p.fill(p.COLOUR2);
+			} else {
+				p.fill(p.COLOUR1);
+			}
 			p.text(defaultText, x + 3, y + h / 2 + 5);
 		} else {
+			p.fill(p.COLOUR1);
 			p.text(p.typing, x + 3, y + h / 2 + 5);
 			p.strokeWeight(3);
 			p.stroke(p.COLOUR2);

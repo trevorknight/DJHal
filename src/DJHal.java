@@ -29,7 +29,7 @@ public class DJHal extends PApplet {
 	
 	// ECHONEST
 	EchoNest echoNest;
-	String[] steers = {"energy", "tempo", "hotttnesss", "danceability", "loudness"};
+	String[] steers = {"energy", "tempo", "song_hotttnesss", "danceability", "loudness"};
 	
 	
 	// OTHER
@@ -153,16 +153,16 @@ public class DJHal extends PApplet {
 	// GUI ELEMENT METHODS
 	// =====================================
 	private void displayMessage() {
-		if ((millis()/1000) - messageStart > 10 ) {
+		if ((millis()/1000) - messageStart > 5 ) {
 			showMessage = false;
 		}
 		if (showMessage) {
-			messageAlpha = constrain(messageAlpha+15,0,255);
+			messageAlpha = constrain(messageAlpha+10,0,255);
 		} else {
-			messageAlpha = constrain(messageAlpha-15,0,255);
+			messageAlpha = constrain(messageAlpha-10,0,255);
 		}
 		fill(color(red(messageColour), green(messageColour), blue(messageColour), messageAlpha));
-		text(message,width-500,25);
+		text(message,width-400,25);
 	}
 	
 	private void setMessage(String text) {

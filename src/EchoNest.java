@@ -21,6 +21,8 @@ public class EchoNest {
 	private String format;
 	private PApplet parent;
 	private String enKey;
+	
+	private String steerCommands;
 
 	EchoNest(PApplet _parent) {
 		parent = _parent;
@@ -33,6 +35,8 @@ public class EchoNest {
 				+ enKey + format + fmaArgs;
 		infoUrl = "http://developer.echonest.com/api/v4/playlist/session_info?api_key="
 				+ enKey + format + "&session_id=";
+		
+		steerCommands = "";
 
 
 	}
@@ -40,13 +44,19 @@ public class EchoNest {
 	public Song newSession(String _description) {
 		String description = "&description=" + _description;
 		String url = playlistUrl + type + description;
+		steerCommands = "";
 		JSONObject response = getResponse(url);
 		return getSong(response);
 	}
 
 	public Song nextSong() {
-		String url = playlistUrl + "&session_id=" + sessionId;
+		String url = playlistUrl + "&session_id=" + sessionId + steerCommands;
+		steerCommands = "";
 		return getSong(getResponse(url));
+	}
+	
+	public void steer(String steer) {
+		steerCommands += steer;
 	}
 
 	private JSONObject getResponse(String url) {
@@ -101,4 +111,5 @@ public class EchoNest {
 		System.out.println(returningSong.getArtist() + " " + returningSong.getTitle() + " " + returningSong.getId());
 		return returningSong;
 	}
+
 }
