@@ -56,6 +56,7 @@ public class EchoNest {
 	}
 	
 	public void steer(String steer) {
+		System.out.println(steer);
 		steerCommands += "&steer="+ steer;
 	}
 

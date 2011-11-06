@@ -25,7 +25,6 @@ public class SteerBar extends GUIElement {
 		p.fill(200);
 		p.rect(x + h + 10, y, w - 2 * h - 20, h);
         p.fill(p.COLOUR2);
-        System.out.println(p.steerValues[steerBarNumber] / p.steerMaxs[steerBarNumber]);
         p.rect(x+h+10, y, p.lerp(0,w-2*h-20,p.steerValues[steerBarNumber]/p.steerMaxs[steerBarNumber]),h);
 		p.fill(0);
 		p.textAlign(PApplet.CENTER);
@@ -35,11 +34,10 @@ public class SteerBar extends GUIElement {
 	}
 
     void clicked() {
-        
         if (leftButton.contains(p.mouseX,p.mouseY)) {
             leftButton.clicked();
         }
-        if (rightButton.contains(p.mouseX,p.messageAlpha)) {
+        if (rightButton.contains(p.mouseX,p.mouseY)) {
             rightButton.clicked();
         }
     }

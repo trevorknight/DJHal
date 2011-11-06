@@ -58,10 +58,10 @@ public class SteerButton extends Button {
 
 	void clicked() {
 		if (direction.equals("left")) {
-			p.echoNest.steer(steerBar.name + "^0.9");
+			p.echoNest.steer(steerBar.name + "^0.7");
 		}
 		if (direction.equals("right")) {
-			p.echoNest.steer(steerBar.name + "^1.1");
+			p.echoNest.steer(steerBar.name + "^1.3");
 		}
         p.setMessage("Session info will update at the start of the next song.");
 	}
