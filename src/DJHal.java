@@ -130,6 +130,8 @@ public class DJHal extends PApplet {
 	
 	private void playSong(Song song) {
 		songs.add(song);
+		//String streamurl = Stream.getStreamURL(song.id);
+		//Stream.Play(streamurl);		
 	}
 	
 	private void loadDescriptors() {
