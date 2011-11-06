@@ -29,7 +29,9 @@ public class DJHal extends PApplet {
 	
 	// ECHONEST
 	EchoNest echoNest;
-		
+	String[] steers = {"energy", "tempo", "hotttnesss", "danceability", "loudness"};
+	
+	
 	// OTHER
 	Random rand = new Random();
 	
@@ -55,6 +57,10 @@ public class DJHal extends PApplet {
 		
 		// GUI 
 		guiElements.add(new TextBox(this,width-500,50,width,50,450,50,"Type a description"));
+		for (int i = 0; i < steers.length; i++) {
+			guiElements.add(new SteerBar(this, steers[i], width/2, 300+75*i, width, 300+75*i, width/2, 50));
+		}
+		
 		message = "";
 		messageColour = color(220,10,10);
 		messageAlpha = 0;
@@ -94,7 +100,7 @@ public class DJHal extends PApplet {
 			  playSong(echoNest.nextSong());
 		  }
 		  if (key == '9') {
-			  showControls();
+			  showHideControls();
 		  }
 		  if (key == '8') {
 			  showMessage = !showMessage;
@@ -171,9 +177,9 @@ public class DJHal extends PApplet {
 		}
 	}
 	
-	private void showControls() {
+	private void showHideControls() {
 		for (GUIElement g : guiElements) {
-			g.show();
+			g.showHide();
 		}
 	}
 	
@@ -181,6 +187,7 @@ public class DJHal extends PApplet {
 		int fillColor = 0;
 		fill(200);
 		textFont(fontA,16);
+		textAlign(LEFT);
 		text("Now: ", 10, 150);
 		text("Next: ", 10, 100);
 		textFont(fontA,24);
@@ -195,6 +202,7 @@ public class DJHal extends PApplet {
 	private void showTitle() {
 		fill(200);
 		textFont(fontA, 36);
+		textAlign(LEFT);
 		text("Now Playing: " + description + " songs", 50, 50);
 	}
 }

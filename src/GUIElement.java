@@ -6,10 +6,10 @@ public class GUIElement {
 	float y;
 	float w;
 	float h;
-	private float shownX;
-	private float shownY;
-	private float hiddenX;
-	private float hiddenY;
+	float shownX;
+	float shownY;
+	float hiddenX;
+	float hiddenY;
 	private boolean hidden;
 	DJHal p; //Parent PApplet
 
@@ -45,12 +45,24 @@ public class GUIElement {
 		}
 	}
 	
+	void showHide() {
+		hidden = !hidden;
+	}
+	
 	void show() {
 		hidden = false;
 	}
 	
 	void hide() {
 		hidden = true;
+	}
+	
+	boolean getHidden() {
+		return hidden;
+	}
+	
+	void setHidden(boolean b) {
+		hidden = b;
 	}
 
 	void clicked() {
