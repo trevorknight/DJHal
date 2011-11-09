@@ -1,4 +1,4 @@
-//import processing.core.PApplet; // Needed for text width command
+//import processing.core.PApplet; // Needed for textWidth method
 
 public class Song {
 	
@@ -7,21 +7,26 @@ public class Song {
 	private int id;
 	private String formattedText;
 	
+	
+	// TODO implement smooth movement of song positions
+	float y;
+	float targetY;
+	
 	Song(){
 		
 	}
 	
+	// TODO use displayText to trim text down to less than half the width of the screen.
 	public String displayText() {
 		if (formattedText != null) {
 			return formattedText;
 		} else {
 			formattedText = artist + " - " + title;
-			// TODO if statement to shorten the text if it is wider than a passed in variable
 			return formattedText;
 		}
 		
 	}
-
+	
 	public String getArtist() {
 		return artist;
 	}

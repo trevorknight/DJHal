@@ -9,7 +9,6 @@
  */
 
 import org.xml.sax.*;
-import java.util.LinkedList;
 
 public class TrackFileHandler
 extends mckay.utilities.xml.ParseFileHandler

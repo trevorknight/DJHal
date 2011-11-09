@@ -19,15 +19,15 @@ public class EchoNest {
 	private String playlistUrl;
 	private String infoUrl;
 	private String format;
-	private PApplet parent;
+	private DJHal p;
 	private String enKey;
 	
 	private String steerCommands;
 
-	EchoNest(PApplet _parent) {
-		parent = _parent;
+	EchoNest(DJHal _p) {
+		p = _p;
 		
-		String[] temp = parent.loadStrings("enKey.txt");
+		String[] temp = p.loadStrings("enKey.txt");
 		enKey = temp[0];
 
 		format = "&format=json";
@@ -56,19 +56,20 @@ public class EchoNest {
 	}
 	
 	public void steer(String steer) {
-		System.out.println(steer);
 		steerCommands += "&steer="+ steer;
+		p.updateNextSong();
+		getInfo();
 	}
 
-    public void getInfo(String[] steers, float[] steerValues) {
+    public void getInfo() {
         JSONObject sessionInfo = getResponse(infoUrl + "&session_id=" + sessionId);
         try {
             JSONArray rules = sessionInfo.getJSONArray("rules");
             for (int i = 0; i < rules.length(); i++) {
                 String rule = rules.getJSONObject(i).getString("rule");
-                for (int j = 0; j < steers.length; j++) {
-                    if (rule.contains(steers[j])) {
-                        steerValues[j] = Float.parseFloat(rule.substring(rule.lastIndexOf(' ')+1));
+                for (int j = 0; j < p.steers.length; j++) {
+                    if (rule.contains(p.steers[j])) {
+                        p.steerValues[j] = Float.parseFloat(rule.substring(rule.lastIndexOf(' ')+1));
                     }
                 }
             }
@@ -81,7 +82,7 @@ public class EchoNest {
 
 	private JSONObject getResponse(String url) {
 		System.out.println(url);
-		String[] returnedStrings = parent.loadStrings(url);
+		String[] returnedStrings = p.loadStrings(url);
 		String returnedString = "";
 		for (String s : returnedStrings) {
 			returnedString += s;

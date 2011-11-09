@@ -24,7 +24,8 @@ public class DJHal extends PApplet {
 	ArrayList<GUIElement> guiElements = new ArrayList<GUIElement>();
 	
 	// SESSION
-	ArrayList<Song> songs = new ArrayList<Song>();
+	ArrayList<Song> pastSongs = new ArrayList<Song>();
+	Song currentSong;
     Song nextSong;
 	ArrayList<String> descriptors = new ArrayList<String>();
 	private String description;
@@ -101,11 +102,7 @@ public class DJHal extends PApplet {
 		    typing += key;
 		  }
 		  if (key == '0') {
-			  playSong(echoNest.nextSong());
-              echoNest.getInfo(steers, steerValues);
-              for (float f : steerValues) {
-                  System.out.println(f);
-              }
+			  startNextSong();
 		  }
 		  if (key == '9') {
 			  showHideControls();
@@ -134,14 +131,24 @@ public class DJHal extends PApplet {
 	}
 	
 	private void playSong(Song song) {
-		songs.add(song);
+		currentSong = song;
+		nextSong = echoNest.nextSong();
 		
-		Object[] parsed_file_contents = Stream.getStreamURL(song.id)
-		streamurl = parsed_file_contents[0].toString();
-		Stream.Play(streamurl);
-		isPlaying = true;
-		length = parsed_file_contents[1].toString();
-				
+//		Object[] parsed_file_contents = Stream.getStreamURL(song.id)
+//		streamurl = parsed_file_contents[0].toString();
+//		Stream.Play(streamurl);
+//		isPlaying = true;
+//		length = parsed_file_contents[1].toString();
+	}
+	
+	private void startNextSong() {
+		pastSongs.add(currentSong);
+		playSong(nextSong);
+		echoNest.getInfo();
+	}
+	
+	public void updateNextSong() {
+		nextSong = echoNest.nextSong();
 	}
 	
 	private void loadDescriptors() {
@@ -196,18 +203,24 @@ public class DJHal extends PApplet {
 	}
 	
 	private void displaySongHistory() {
-		int fillColor = 0;
-		fill(200);
+		//For now and next display:
+		fill(COLOUR1);
 		textFont(fontA,16);
 		textAlign(LEFT);
 		text("Now: ", 10, 150);
 		text("Next: ", 10, 100);
 		textFont(fontA,24);
+		fill(BLACK);
+		text(currentSong.getArtist() + " - " + currentSong.getTitle(), 50, 150);
+		fill(20);
 		text(nextSong.getArtist() + " - " + nextSong.getTitle(), 50, 100);
-		int newestSong = songs.size()-1;
+		
+		//For past song display:
+		int newestSong = pastSongs.size()-1;
+		int fillColor = 0;
 		for (int i = newestSong; i >= 0; i--) {
 			fill(fillColor);
-			text(songs.get(i).getArtist() + " - " + songs.get(i).getTitle(), 50, 150+((newestSong - i)*50));
+			text(pastSongs.get(i).getArtist() + " - " + pastSongs.get(i).getTitle(), 50, 200+((newestSong - i)*50));
 			fillColor += 20;
 		}
 	}
